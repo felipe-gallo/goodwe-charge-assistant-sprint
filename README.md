@@ -1,6 +1,8 @@
-# GoodWe Charge Assistant - Sprint 03
+# GoodWe Charge Assistant - Sprint 04
 
-Chatbot desenvolvido para o EV Challenge 2026 da FIAP, com foco no contexto da GoodWe e na gestão inteligente de carregadores para veículos elétricos.
+Chatbot desenvolvido para o EV Challenge 2026 da FIAP, com foco no contexto da GoodWe e na gestão inteligente de carregadores para veículos elétricos. A Sprint 04 adiciona um golden dataset e um pipeline de avaliação para comparar versões do agente de maneira reproduzível.
+
+> A documentação completa da entrega está em [docs/SPRINT4_AVALIACAO.md](docs/SPRINT4_AVALIACAO.md). As seções históricas abaixo registram a base técnica da Sprint 03.
 
 Esta Sprint 03 é uma continuação direta das Sprints 1 e 2. A proposta original, a persona, o contexto GoodWe, o system prompt e os cinco temas funcionais foram preservados. O núcleo conversacional, porém, foi refatorado para utilizar um framework de agentes de IA, memória por sessão, guardrails e avaliação sistemática entre modelos.
 
