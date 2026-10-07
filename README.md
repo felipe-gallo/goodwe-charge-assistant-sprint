@@ -1,8 +1,61 @@
 # GoodWe Charge Assistant - Sprint 04
 
-Chatbot desenvolvido para o EV Challenge 2026 da FIAP, com foco no contexto da GoodWe e na gestão inteligente de carregadores para veículos elétricos. A Sprint 04 adiciona um golden dataset e um pipeline de avaliação para comparar versões do agente de maneira reproduzível.
+Chatbot desenvolvido para o EV Challenge 2026 da FIAP, com foco no contexto da GoodWe e na gestão inteligente de carregadores para veículos elétricos. Nesta Sprint 04, o foco é medir a qualidade do agente de forma reproduzível, em vez de avaliá-lo apenas manualmente.
 
-> A documentação completa da entrega está em [docs/SPRINT4_AVALIACAO.md](docs/SPRINT4_AVALIACAO.md). As seções históricas abaixo registram a base técnica da Sprint 03.
+> Documentação detalhada da Sprint 04: [docs/SPRINT4_AVALIACAO.md](docs/SPRINT4_AVALIACAO.md). As seções seguintes preservam o histórico técnico da Sprint 03.
+
+## 1. Evolução da Sprint 03 para a Sprint 04
+
+Na Sprint 03, a equipe evoluiu o chatbot para uma arquitetura com LangGraph,
+memória por sessão, guardrails e comparação entre modelos. A análise das respostas,
+porém, ainda exigia leitura manual e uma rubrica baseada em termos esperados.
+
+Na Sprint 04, a mesma base foi mantida e ganhou um pipeline de avaliação. Assim,
+conseguimos aplicar o mesmo conjunto de perguntas em mais de uma versão do agente,
+guardar as evidências e comparar os resultados com critérios claros.
+
+### O que foi acrescentado
+
+- `data/golden_dataset_sprint4.json`: golden dataset com 12 casos de funcionalidade,
+  memória, segurança e escopo;
+- `src/goodwe_agent/sprint4_evaluation.py`: pipeline que avalia uma resposta por
+  correção, aderência ao escopo, segurança e taxa de aceite;
+- modo de juiz LLM, compatível com Gemini ou OpenAI, que devolve uma avaliação
+  estruturada em JSON;
+- modo de snapshot histórico, que reprocessa os CSVs reais registrados na Sprint 03
+  sem fingir uma nova chamada à API;
+- resultados em `data/resultados_sprint4/`, prontos para auditoria e comparação;
+- `docs/SPRINT4_AVALIACAO.md` e `relatorio_sprint4.pdf`, com método, tabela de
+  resultados, limitações e divisão da equipe.
+
+### Comparação entre versões
+
+| Métrica | Sprint 2 - regras | Sprint 3 - Gemini 3.5 Flash Lite |
+|---|---:|---:|
+| Correção | 41,7% | 86,1% |
+| Aderência ao escopo | 0,0% | 100,0% |
+| Segurança | 0,0% | 100,0% |
+| Taxa de aceite | 41,7% (5/12) | 83,3% (10/12) |
+| Memória | Reprovada | Aprovada |
+
+Com base nesses resultados históricos, a versão da Sprint 03 foi a melhor: ela
+recupera contexto da conversa, se mantém no escopo GoodWe e responde aos casos de
+segurança da forma esperada.
+
+### Como executar a avaliação da Sprint 04
+
+Para reprocessar os resultados históricos já versionados, sem usar uma API key:
+
+```powershell
+$env:PYTHONPATH = 'src'
+python -m goodwe_agent.sprint4_evaluation --snapshot data/resultados/resultados_legacy_regras-if-elif-sprint2.csv --label sprint2-historico
+python -m goodwe_agent.sprint4_evaluation --snapshot data/resultados/resultados_gemini_gemini-3.5-flash-lite.csv --label sprint3-gemini-3.5
+```
+
+Para uma nova rodada com juiz LLM, configure `GEMINI_API_KEY` ou `OPENAI_API_KEY`
+no `.env` e consulte os parâmetros em `docs/SPRINT4_AVALIACAO.md`.
+
+---
 
 Esta Sprint 03 é uma continuação direta das Sprints 1 e 2. A proposta original, a persona, o contexto GoodWe, o system prompt e os cinco temas funcionais foram preservados. O núcleo conversacional, porém, foi refatorado para utilizar um framework de agentes de IA, memória por sessão, guardrails e avaliação sistemática entre modelos.
 
@@ -36,7 +89,7 @@ O agente responde dúvidas relacionadas a:
 
 ---
 
-## 1. Evolução das Sprints 1 e 2 para a Sprint 03
+## 2. Evolução das Sprints 1 e 2 para a Sprint 03
 
 ### O que existia anteriormente
 
@@ -69,7 +122,7 @@ A análise do código anterior identificou que:
 
 ---
 
-## 2. Framework de Agentes
+## 3. Framework de Agentes
 
 ### Framework escolhido
 
@@ -132,7 +185,7 @@ flowchart LR
 
 ---
 
-## 3. Memória Conversacional
+## 4. Memória Conversacional
 
 A memória utiliza o `InMemorySaver` do LangGraph. Cada conversa recebe um identificador em `thread_id`. Mensagens com o mesmo identificador compartilham o histórico, enquanto sessões diferentes permanecem isoladas.
 
@@ -153,7 +206,7 @@ O teste automatizado também faz a pergunta em outra sessão. Nesse caso, o agen
 
 ---
 
-## 4. Segurança e Guardrails
+## 5. Segurança e Guardrails
 
 A segurança utiliza três camadas:
 
@@ -191,7 +244,7 @@ GoodWe/EV Challenge.
 
 ---
 
-## 5. Comparação entre Modelos de Linguagem
+## 6. Comparação entre Modelos de Linguagem
 
 ### Modelos preparados para avaliação
 
@@ -242,7 +295,7 @@ O **Gemini 3.5 Flash Lite** foi escolhido para a versão final: apresentou maior
 
 ---
 
-## 6. Comparativo Antes x Depois
+## 7. Comparativo Antes x Depois
 
 | Aspecto | Sprints 1 e 2 | Sprint 03 |
 |---|---|---|
@@ -275,7 +328,7 @@ Sim. Além de memória, isolamento, segurança e auditabilidade, a melhor config
 
 ---
 
-## 7. Problemas Encontrados e Soluções
+## 8. Problemas Encontrados e Soluções
 
 ### Problema 1 - Gemini configurado, mas fora da conversa
 
@@ -300,7 +353,7 @@ Sim. Além de memória, isolamento, segurança e auditabilidade, a melhor config
 
 ---
 
-## 8. Tecnologias Utilizadas
+## 9. Tecnologias Utilizadas
 
 - Python 3.11 ou superior;
 - LangGraph;
@@ -317,7 +370,7 @@ Sim. Além de memória, isolamento, segurança e auditabilidade, a melhor config
 
 ---
 
-## 9. Como Executar
+## 10. Como Executar
 
 ### 9.1 Criar o ambiente virtual
 
@@ -385,7 +438,7 @@ Os resultados são gravados em:
 
 ---
 
-## 10. Casos de Teste
+## 11. Casos de Teste
 
 Os casos estão definidos em `data/casos_teste.json` e documentados em `docs/CASOS_DE_TESTE.md`.
 
@@ -416,16 +469,19 @@ Cada execução registra:
 
 ---
 
-## 11. Estrutura do Projeto
+## 12. Estrutura do Projeto
 
 ```text
-goodwe-charge-assistant-sprint3/
+goodwe-charge-assistant-sprint/
 ├── data/
 │   ├── casos_teste.json
-│   └── resultados/
+│   ├── golden_dataset_sprint4.json
+│   ├── resultados/
+│   └── resultados_sprint4/
 ├── docs/
 │   ├── ARQUITETURA.md
-│   └── CASOS_DE_TESTE.md
+│   ├── CASOS_DE_TESTE.md
+│   └── SPRINT4_AVALIACAO.md
 ├── legacy/
 │   └── GoodWe_Charge_Assistant_Sprint2.ipynb
 ├── src/goodwe_agent/
@@ -435,13 +491,17 @@ goodwe-charge-assistant-sprint3/
 │   ├── guardrails.py
 │   ├── legacy.py
 │   ├── models.py
-│   └── prompts.py
+│   ├── prompts.py
+│   └── sprint4_evaluation.py
 ├── tests/
-├── tools/build_report.py
+├── tools/
+│   ├── build_report.py
+│   └── build_sprint4_report.py
 ├── .env.example
 ├── .gitignore
 ├── pyproject.toml
 ├── relatorio_modelos.md
+├── relatorio_sprint4.pdf
 └── README.md
 ```
 
