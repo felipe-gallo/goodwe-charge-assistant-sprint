@@ -8,12 +8,12 @@ Esta Sprint 03 é uma continuação direta das Sprints 1 e 2. A proposta origina
 
 ## Integrantes
 
-- Arthur Maziviero Faria - RM 573928
-- Jun Uehara - RM 570537
-- Felipe de Souza Gallo - RM 569680
-- Roberson Reguero Luiz Junior - RM 573031
-- Tommaso C. Nagliatti - RM 572147
-- Matheus Martins Lacerda - RM 570843
+- Arthur Maziviero Faria - RM 573928 - Turma 1CCA
+- Jun Uehara - RM 570537 - Turma 1CCA
+- Felipe de Souza Gallo - RM 569680 - Turma 1CCA
+- Roberson Reguero Luiz Junior - RM 573031 - Turma 1CCA
+- Tommaso C. Nagliatti - RM 572147 - Turma 1CCA
+- Matheus Martins Lacerda - RM 570843 - Turma 1CCA
 
 ## Problema Abordado
 

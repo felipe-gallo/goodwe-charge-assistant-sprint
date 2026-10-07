@@ -383,6 +383,7 @@ def build():
             ["Matheus Martins Lacerda", "570843", "Testes funcionais, Git e video"],
         ], [66 * mm, 23 * mm, 75 * mm], font_size=7.2),
         Spacer(1, 3 * mm),
+        p("Turma: <b>1CCA</b>", s["small"]),
         p("Referencias tecnicas", s["h2"]),
         p(
             "LangGraph - Memory: https://docs.langchain.com/oss/python/langgraph/add-memory<br/>"
